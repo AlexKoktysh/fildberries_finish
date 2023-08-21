@@ -11,7 +11,7 @@ export const HomePage = (props) => {
             <UserDialogComponent
                 disabled={props.disabled}
                 openDialogText="Сохранить все"
-                agreeActionFunc={props.submit}
+                agreeActionFunc={() => props.submit()}
                 agreeActionText='Сохранить все'
                 openedDialogTitle='Сохранение товарных позиций'
                 desAgreeActionText="Отмена"
