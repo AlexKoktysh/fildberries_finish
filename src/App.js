@@ -5,213 +5,10 @@ import { getDate, editDate } from "./api";
 import { InputComponent } from "./components/InputComponent";
 import UserDialogComponent from "./components/UserDialogComponent";
 
-const columns = [
-  {
-      "accessorKey": "id",
-      "header": "№",
-      "enableSorting": false,
-      "enableColumnFilter": false,
-      "enableColumnActions": false,
-      "enableGlobalFilter": false,
-      "size": 60,
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      }
-  },
-  {
-      "accessorKey": "object",
-      "header": "Наименование товара",
-      "enableGlobalFilter": true,
-      "size": 60,
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      }
-  },
-  {
-      "accessorKey": "seller_article",
-      "header": "Артикул поставщика",
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      },
-      "size": 60
-  },
-  {
-      "accessorKey": "wb_article",
-      "enableGlobalFilter": false,
-      "header": "Артикул WB",
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      },
-      "size": 60
-  },
-  {
-      "accessorKey": "currency_price",
-      "enableGlobalFilter": false,
-      "header": "Акционная цена, RUB",
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      },
-      "size": 60
-  },
-  {
-      "accessorKey": "price",
-      "enableGlobalFilter": false,
-      "header": "Акционная цена, BYN",
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      },
-      "size": 60
-  },
-  {
-      "accessorKey": "my_warehouse_commission",
-      "enableGlobalFilter": false,
-      "enableColumnFilter": false,
-      "header": "Комиссия WB, BYN",
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      },
-      "size": 60
-  },
-  {
-      "accessorKey": "logistic_commission",
-      "enableGlobalFilter": false,
-      "enableColumnFilter": false,
-      "filterFn": "customLogisticCommissionFilterFn",
-      "header": "Комиссия логистики, BYN",
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      },
-      "size": 60
-  },
-  {
-      "accessorKey": "distributor_price",
-      "enableGlobalFilter": false,
-      "enableColumnFilter": false,
-      "filterFn": "customDistributorFilterFn",
-      "header": "Цена поставщика, BYN",
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      },
-      "size": 60
-  },
-  {
-      "accessorKey": "sum_result",
-      "enableGlobalFilter": false,
-      "enableColumnFilter": false,
-      "header": "Выгода, BYN",
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      },
-      "size": 60
-  },
-  {
-      "accessorKey": "analyze_description",
-      "enableGlobalFilter": false,
-      "enableColumnFilter": false,
-      "header": "Результат анализа",
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      },
-      "size": 60
-  },
-  {
-      "accessorKey": "distributor_name",
-      "enableGlobalFilter": false,
-      "enableColumnFilter": false,
-      "header": "Наименование поставщика",
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      },
-      "size": 60
-  },
-  {
-      "accessorKey": "edit",
-      "header": "Редактировать",
-      "enableSorting": false,
-      "enableColumnFilter": false,
-      "enableColumnActions": false,
-      "size": 120,
-      "muiTableHeadCellProps": {
-          "align": "center"
-      },
-      "muiTableBodyCellProps": {
-          "align": "center"
-      }
-  }
-];
-
-const rows_base = [
-    {
-        "id": 1,
-        "object": "Охлаждение процессора",
-        "seller_article": "SE-207-XT ADVANCED_138938162",
-        "wb_article": "SE-207-XT ADVANCED_138938162",
-        "currency_price": 56.65,
-        "price": 157.11,
-        "my_warehouse_commission": 123,
-        "logistic_commission": 99,
-        "distributor_price": 166.65,
-        "sum_result": 26,
-        "analyze_result": 1,
-        "distributor_name": "distributor_name",
-        "edit": "1234567"
-    },
-    {
-        "id": 2,
-        "object": "Охлаждение процессора",
-        "seller_article": "SE-207-XT ADVANCED_138938162",
-        "wb_article": "SE-207-XT ADVANCED_138938162",
-        "currency_price": 56.65,
-        "price": 157.11,
-        "my_warehouse_commission": 123,
-        "logistic_commission": 99,
-        "distributor_price": 166.65,
-        "sum_result": 26,
-        "analyze_result": 1,
-        "distributor_name": "distributor_name",
-        "edit": "123"
-    },
-];
-
 export const App = () => {
+  const [disabled, setDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
-  // const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [pagination, setPagination] = useState({
@@ -231,37 +28,27 @@ export const App = () => {
 
   const [allert, setAllert] = useState("");
 
-  const fetchDate = async (params) => {
-    // sessionStorage.removeItem("editFields");
-    setLoading(true);
-    setGreenRows([]);
-    setRedRows([]);
-    setWhiteRows([]);
-    setRows([]);
-    setItems([]);
-    // const data = await getDate(params);
-    setLoading(false);
-    // if (data.error) return setAllert(data.error["ajax-errors"]);
-    // const { columns, rows, totalRecords } = data;
-    const green = rows_base.map((el) => {
-      if (el.analyze_result === 1)
+  const setRenderRows = ({ columns, rows, totalRecords }) => {
+    const green = rows.map((el) => {
+        if (el.analyze_result === 1)
+          return el.id;
+    });
+    const red = rows.map((el) => {
+    if (el.analyze_result === 0)
         return el.id;
     });
-    const red = rows_base.map((el) => {
-      if (el.analyze_result === 0)
+    const white = rows.map((el) => {
+    if (el.analyze_result === -1)
         return el.id;
     });
-    const white = rows_base.map((el) => {
-      if (el.analyze_result === -1)
-        return el.id;
-    });
-    const storageArray = rows_base.map((el) => ({
+    const storageArray = rows.map((el) => ({
         id: el.edit,
-        logistic_commission: el.logistic_commission,
-        distributor_price: el.distributor_price,
+        logistic_commission: Number(el.logistic_commission),
+        distributor_price: Number(el.distributor_price),
+        disabled: true,
     }));
     sessionStorage.setItem("editFields", JSON.stringify([...storageArray]));
-    const custom_rows = rows_base.map((el) => ({
+    const custom_rows = rows.map((el) => ({
         ...el,
         "logistic_commission": <InputComponent defaultValue={el.logistic_commission} id={el.edit} onChangeField={onChangeField} fields="logistic_commission" />,
         "distributor_price": <InputComponent defaultValue={el.distributor_price} id={el.edit} onChangeField={onChangeField} fields="distributor_price" />,
@@ -282,11 +69,25 @@ export const App = () => {
     setGreenRows(green);
     setRedRows(red);
     setWhiteRows(white);
-    // setColumns(columns);
-    // setTotalRecords(totalRecords);
+    setColumns(columns);
+    setTotalRecords(totalRecords);
+  };
+
+  const fetchDate = async (params) => {
+    setLoading(true);
+    setGreenRows([]);
+    setRedRows([]);
+    setWhiteRows([]);
+    setRows([]);
+    setItems([]);
+    const data = await getDate(params);
+    setLoading(false);
+    if (data.error) return setAllert(data.error["ajax-errors"]);
+    setRenderRows(data);
   };
 
   const onChangeField = (id, value, fieldName) => {
+    setDisabled(false);
     const storageItems = JSON.parse(sessionStorage.getItem("editFields"));
     const newArray = storageItems.map((el) => {
         if (el.id === id) {
@@ -295,11 +96,13 @@ export const App = () => {
                 {
                     ...el,
                     logistic_commission: Number(value),
+                    disabled: false,
                 }
             :
                 {
                     ...el,
                     distributor_price: Number(value),
+                    disabled: false,
                 };
         }
         return el;
@@ -330,10 +133,14 @@ export const App = () => {
     sessionStorage.setItem("editFields", JSON.stringify([...newArray]));
   };
 
-  const saveField = (id) => {
+  const saveField = async (id) => {
     setLoading(true);
-    const items = JSON.parse(sessionStorage.getItem("editFields"));
-    const find = items.find((el) => el.id === id);
+    const items = JSON.parse(sessionStorage.getItem("editFields")).filter((el) => !el.disabled);
+    const serverItems = items.map((el) => {
+        delete el.disabled;
+        return el;
+    });
+    const find = serverItems.find((el) => el.id === id);
     let params = {};
     if (id) {
       params = {
@@ -346,7 +153,7 @@ export const App = () => {
       };
     } else {
       params = {
-        fields: items,
+        fields: serverItems,
         filters: columnFilters,
         sorting,
         take: pagination.pageSize,
@@ -354,7 +161,11 @@ export const App = () => {
         searchText: globalFilter,
       };
     }
-    console.log("params", params);
+    setRows([]);
+    const data = await editDate(params);
+    setLoading(false);
+    if (data.error) return setAllert(data.error["ajax-errors"]);
+    setRenderRows(data);
   };
 
   useEffect(() => {
@@ -402,6 +213,8 @@ export const App = () => {
       redRows={redRows}
       whiteRows={whiteRows}
       items={items}
+      submit={saveField}
+      disabled={disabled}
     />
   );
 };
